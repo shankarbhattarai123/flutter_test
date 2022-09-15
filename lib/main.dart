@@ -42,30 +42,13 @@ class _StartPageState extends State<StartPage> {
   late VideoBloc _videoBloc;
   List data = [];
   int video1Loop = 1;
-  int video2Loop = 1;
-  int video3Loop = 1;
   int rep = 10;
 
   @override
   void initState() {
     _videoBloc = BlocProvider.of<VideoBloc>(context);
     _videoBloc.add(GetVideoList());
-    _controller1 = VideoPlayerController.asset("")
-      ..initialize().then((_) {
-        setState(() {});
-      });
-
-    _controller2 = VideoPlayerController.asset("")
-      ..initialize().then((_) {
-        setState(() {});
-      });
-    _controller3 = VideoPlayerController.asset("")
-      ..initialize().then((_) {
-        setState(() {});
-      });
     algoForLoop();
-    // playVideo1();
-    setState(() {});
     super.initState();
   }
 
@@ -78,15 +61,15 @@ class _StartPageState extends State<StartPage> {
 
   void algoForLoop() {
     if (video1Loop <= rep) {
-      Future.delayed(const Duration(seconds: 6), () {
+      Future.delayed(const Duration(seconds: 5), () {
         video1Play();
       });
     }
   }
 
   void number2Loop() {
-    if (video2Loop <= 2) {
-      Future.delayed(const Duration(seconds: 2), () {
+    if (video1Loop == (rep / 5) + rep) {
+      Future.delayed(const Duration(seconds: 20), () {
         video2Play();
       });
     }
@@ -113,13 +96,13 @@ class _StartPageState extends State<StartPage> {
   }
 
   void video2Play() {
-    video2Loop += 1;
+    video1Loop += 1;
 
     // _controller2.setLooping(true);
     _controller2.play();
     _controller2.initialize().then((_) => setState(() {}));
     number2Loop();
-    if (video2Loop == 2) {
+    if (video1Loop == 2) {
       _controller2.pause();
       video3Play();
     }
@@ -127,7 +110,7 @@ class _StartPageState extends State<StartPage> {
   }
 
   void video3Play() {
-    video3Loop += 1;
+    video1Loop += 1;
     _controller3.play();
     _controller3.initialize().then((_) => setState(() {}));
     number3Loop();
@@ -136,44 +119,50 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: Center(
-            child: BlocListener<VideoBloc, VideoState>(
-          listener: (context, state) {
-            if (state is VideoLaodWaiting) {
-              // EasyLoading.show(status: "loading");
-            } else if (state is VideoLaodError) {
-              // EasyLoading.showError("error occured");
-            } else if (state is GetVideoListSuccess) {
-              data.addAll(state.videoData);
-              _controller1 = VideoPlayerController.asset(data[0].url)
-                ..initialize().then((_) {
-                  setState(() {});
-                });
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Test app"),
+        backgroundColor: Colors.black54,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Center(
+              child: BlocListener<VideoBloc, VideoState>(
+            listener: (context, state) {
+              if (state is VideoLaodWaiting) {
+                // EasyLoading.show(status: "loading");
+              } else if (state is VideoLaodError) {
+                // EasyLoading.showError("error occured");
+              } else if (state is GetVideoListSuccess) {
+                data.addAll(state.videoData);
+                _controller1 = VideoPlayerController.asset(data[0].url)
+                  ..initialize().then((_) {
+                    setState(() {});
+                  });
 
-              _controller2 = VideoPlayerController.asset(data[1].url)
-                ..initialize().then((_) {});
-              _controller3 = VideoPlayerController.asset(data[2].url)
-                ..initialize().then((_) {
-                  setState(() {});
-                });
-              setState(() {});
+                _controller2 = VideoPlayerController.asset(data[1].url)
+                  ..initialize().then((_) {});
+                _controller3 = VideoPlayerController.asset(data[2].url)
+                  ..initialize().then((_) {
+                    setState(() {});
+                  });
+                setState(() {});
 
-              rep = data[0].repetation;
-            }
-          },
-          child: data.isNotEmpty
-              ? Column(
-                  children: <Widget>[
-                    VideoPlayerpage(controller: _controller1),
-                    VideoPlayerpage(controller: _controller2),
-                    VideoPlayerpage(controller: _controller3),
-                  ],
-                )
-              : Container(),
-        )),
+                rep = data[0].repetation;
+              }
+            },
+            child: data.isNotEmpty
+                ? Column(
+                    children: <Widget>[
+                      VideoPlayerpage(controller: _controller1),
+                      VideoPlayerpage(controller: _controller2),
+                      VideoPlayerpage(controller: _controller3),
+                    ],
+                  )
+                : Container(),
+          )),
+        ),
       ),
     );
   }
