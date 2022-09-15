@@ -54,7 +54,7 @@ class _StartPageState extends State<StartPage> {
 
   void playVideo1() {
     // play video 10 times
-
+    video1Play();
     _controller1.play();
     _controller1.initialize().then((_) => setState(() {}));
   }
