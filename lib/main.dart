@@ -56,13 +56,15 @@ class _StartPageState extends State<StartPage> {
     // play video 10 times
     video1Play();
     _controller1.play();
+    _controller1.setLooping(true);
     _controller1.initialize().then((_) => setState(() {}));
   }
 
   void algoForLoop() {
-    if (video1Loop <= rep) {
+    if (video1Loop == rep) {
       Future.delayed(const Duration(seconds: 5), () {
         video1Play();
+        _controller1.setLooping(true);
       });
     }
   }
@@ -71,6 +73,7 @@ class _StartPageState extends State<StartPage> {
     if (video1Loop == (rep / 5) + rep) {
       Future.delayed(const Duration(seconds: 20), () {
         video2Play();
+        _controller2.setLooping(true);
       });
     }
   }
@@ -87,8 +90,8 @@ class _StartPageState extends State<StartPage> {
     video1Loop += 1;
     _controller1.play();
     _controller1.initialize().then((_) => setState(() {}));
-    algoForLoop();
-    if (video1Loop == 2) {
+    // algoForLoop();
+    if (video1Loop == rep) {
       _controller1.pause();
       video2Play();
     }
@@ -102,7 +105,7 @@ class _StartPageState extends State<StartPage> {
     _controller2.play();
     _controller2.initialize().then((_) => setState(() {}));
     number2Loop();
-    if (video1Loop == 2) {
+    if (video1Loop == (rep / 5) + rep) {
       _controller2.pause();
       video3Play();
     }
