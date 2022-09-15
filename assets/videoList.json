@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "url": "assets/videos/xyz.mp4",
+      "repetation": 2
+    },
+    {
+      "url": "assets/videos/abc.mp4",
+      "repetation": 2
+    },
+    {
+      "url": "assets/videos/pqr.mp4",
+      "repetation": 2
+    }
+  ]
+}
